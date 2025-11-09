@@ -532,3 +532,44 @@ procdump(void)
     cprintf("\n");
   }
 }
+
+int
+sys_setpriority(void)
+{
+  int pid, pr;
+  if(argint(0, &pid) < 0) return -1;
+  if(argint(1, &pr) < 0) return -1;
+
+  struct proc *p;
+
+  acquire(&ptable.lock);
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if(p->pid == pid){
+      p->priority = pr;
+      release(&ptable.lock);
+      return 0;
+    }
+  }
+  release(&ptable.lock);
+  return -1;
+}
+
+int
+sys_getpriority(void)
+{
+  int pid;
+  if(argint(0, &pid) < 0) return -1;
+
+  struct proc *p;
+
+  acquire(&ptable.lock);
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if(p->pid == pid){
+      int r = p->priority;
+      release(&ptable.lock);
+      return r;
+    }
+  }
+  release(&ptable.lock);
+  return -1;
+}

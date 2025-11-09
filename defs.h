@@ -155,6 +155,8 @@ int             argstr(int, char**);
 int             fetchint(uint, int*);
 int             fetchstr(uint, char**);
 void            syscall(void);
+int             sys_setpriority(void);
+int 		sys_getpriority(void);
 
 // timer.c
 void            timerinit(void);
@@ -188,3 +190,4 @@ void            clearpteu(pde_t *pgdir, char *uva);
 
 // number of elements in fixed-size array
 #define NELEM(x) (sizeof(x)/sizeof((x)[0]))
+
